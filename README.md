@@ -32,12 +32,21 @@ Both datasets can be joined using the `EIN` / `EIN2` field.
 
 ```text
 .
-├── sample/
-│   ├── BMF_UNIFIED_sample.csv                  # Sample of Original downloaded dataset
-│   ├── METADATA_ADDRESS_GEOCODED_sample.csv            # Cleaned and joined data
+├── sample/ # Sample of Original downloaded dataset
+│   ├── BMF_UNIFIED_sample.csv                  
+│   ├── METADATA_ADDRESS_GEOCODED_sample.csv
 │
 ├── schema analysis/
 │   ├── BMF Dataset Schema.xsls     # Initial schema exploration
 │   ├── Address Meta Data Schema.xlsx     # Initial schema exploration
+├── Data/  # Cleaned sample data
+│   ├── BMF_UNIFIED_sample_cleaned.csv    
+│   ├── METADATA_ADDRESS_GEOCODED_sample_duplicates.csv
+│   ├── METADATA_ADDRESS_GEOCODED_sample_final.csv
 │
+└── clean-address-metadata.py # script used to clean address data
+└── clean-bmf.py # script used to clean bmf data
+└── load_bmf_to_postgres.py # script to load data to local postgress server
+└── README_postgres.md
 └── README.md
+└── requirements.txt
