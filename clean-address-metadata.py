@@ -8,9 +8,12 @@ def clean_metadata_fill_blanks_with_nan(input_path, output_path, duplicate_path)
     num_rows, num_cols = df.shape
     print(f"Starting off with input shape: {num_rows} rows × {num_cols} columns")
 
-
     # Standardize column names
     df.columns = [col.strip() for col in df.columns]
+
+    # Rename LONGITDUE to LONGITUDE for consistency
+    if "LONGITDUE" in df.columns:
+        df.rename(columns={"LONGITDUE": "LONGITUDE"}, inplace=True)
 
     # Replace all empty strings or pure whitespace with np.nan
     df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
@@ -21,13 +24,16 @@ def clean_metadata_fill_blanks_with_nan(input_path, output_path, duplicate_path)
     # Identify duplicate EIN2 values
     duplicated_eins = df[df.duplicated("EIN2", keep=False)].copy()
     num_duplicates = duplicated_eins["EIN2"].nunique()
-
-    # Print number of EINs with duplicates and sample rows
-    print(f"Duplicate EIN2 values found for {num_duplicates} unique EINs.")
-    print("Sample rows with duplicate EIN2s:")
-    print(duplicated_eins.head(10))
-    print("Saving to duplicate file:", duplicate_path)
-    duplicated_eins.to_csv(duplicate_path, index=False)
+    
+    if(num_duplicates == 0):
+        print("No duplicate EIN2 values found.")
+    else:
+        # Print number of EINs with duplicates and sample rows
+        print(f"Duplicate EIN2 values found for {num_duplicates} unique EINs.")
+        print("Sample rows with duplicate EIN2s:")
+        print(duplicated_eins.head(10))
+        print("Saving to duplicate file:", duplicate_path)
+        duplicated_eins.to_csv(duplicate_path, index=False)
 
     # Remove all but the first occurrence of each duplicate EIN2
     #df = df.drop_duplicates(subset="EIN2", keep="first")
@@ -63,8 +69,8 @@ def clean_metadata_fill_blanks_with_nan(input_path, output_path, duplicate_path)
     df["LATITUDE"] = pd.to_numeric(df["LATITUDE"], errors='coerce')
     df.loc[~df["LATITUDE"].between(-90, 90), "LATITUDE"] = np.nan
 
-    df["LONGITDUE"] = pd.to_numeric(df["LONGITDUE"], errors='coerce')
-    df.loc[~df["LONGITDUE"].between(-180, 180), "LONGITDUE"] = np.nan
+    df["LONGITUDE"] = pd.to_numeric(df["LONGITUDE"], errors='coerce')
+    df.loc[~df["LONGITUDE"].between(-180, 180), "LONGITUDE"] = np.nan
 
     # Optional: convert all integer columns to nullable Int64 dtype
     for col in df.select_dtypes(include=["float64", "int64"]).columns:
@@ -85,6 +91,6 @@ def clean_metadata_fill_blanks_with_nan(input_path, output_path, duplicate_path)
 # Execute the updated script
 clean_metadata_fill_blanks_with_nan(
     input_path="Sample/METADATA_ADDRESS_GEOCODED_sample.csv",
-    output_path="Data/METADATA_ADDRESS_GEOCODED_sample_final.csv",
+    output_path="Data/METADATA_ADDRESS_GEOCODED_sample_cleaned.csv",
     duplicate_path = "Data/METADATA_ADDRESS_GEOCODED_sample_duplicates.csv",
 )
