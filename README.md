@@ -43,7 +43,22 @@ Both datasets can be joined using the `EIN` / `EIN2` field.
 │   ├── BMF_UNIFIED_sample_cleaned.csv    
 │   ├── METADATA_ADDRESS_GEOCODED_sample_duplicates.csv
 │   ├── METADATA_ADDRESS_GEOCODED_sample_final.csv
-│
+│   ├── METADATA_ADDRESS_GEOCODED_sample_final.csv
+├── NORP-Repo-code/  # NORP framework scripts
+│   ├── python_scripts/ #python scripts used to clean, create and insert into Metabase
+│       │── bmf_clean_data.py #script to clean bmf dataset
+│       │── create_tables.py #script to create tables in the DB
+│       │── insert_into_tables.py #script to insert data into the DB
+│       │── NCCS_Address_Metadata_Table_Cleaning.py #script to clean addresss dataset
+│   ├── sql_scripts/create_tables/ #sql queries for the create command for teh datasets
+│       │── sql_scripts/create_tables/bmf.sql
+│       │── NCCS_Address_Metadata_cbsa.sql
+│       │── NCCS_Address_Metadata_census_blocks.sql
+│       │── NCCS_Address_Metadata_counties.sql
+│       │── NCCS_Address_Metadata_org_loc.sql
+│       │── NCCS_Address_Metadata_states.sql
+│       │── NCCS_Address_Metadata_tracts.sql
+│       │── NCCS_Address_Metadata_urban_areas.sql
 └── clean-address-metadata.py # script used to clean address data
 └── clean-bmf.py # script used to clean bmf data
 └── load_bmf_to_postgres.py # script to load data to local postgress server
